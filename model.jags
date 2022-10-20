@@ -1,0 +1,17 @@
+######## Practical 5 - Maeve Li (Minqing Li) s2167017 ########
+
+model {
+  x[1] ~ dnorm(0,0.01)
+  x[2] ~ dnorm(x[1],tau)
+  for (i in 3:N) {
+    x[i] ~ dnorm(2*x[i-1]-x[i-2],tau) ## specify the distribution for x_i
+  }
+  for (i in 1:N){
+    n[i] = exp(x[i]) ## calculate n_i
+  } 
+  m = B%*%n
+  for (i in 1:N){
+    y[i] ~ dpois(m[i]) ## specify the distribution for y_i
+  }
+  tau ~ dgamma(4,0.04) ## precision prior
+}
